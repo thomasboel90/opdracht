@@ -45,6 +45,21 @@ app.post('/add',(req,res) => {
         })
 });
 
+//Delete messages from board:
+
+app.post('/delete/message/:id',(req,res) => {
+    const client = new Client({
+        connectionString: connectionString,
+    })
+    client.connect()
+    .then(() => {
+        return client.query(`DELETE FROM messages WHERE id=$1`,[req.params.id])
+    })
+    .then((result) => {
+        return res.redirect('/')
+    })
+});
+
 // Port:
 
 app.listen(port, () => console.log(`App listening on Port: ${port}!`))
