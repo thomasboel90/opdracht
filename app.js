@@ -60,6 +60,34 @@ app.post('/delete/message/:id',(req,res) => {
     })
 });
 
+//Edit messages from board:
+
+app.get('/edit/message/:id',(req,res)=>{
+        const client = new Client({
+                connectionString: connectionString,
+            })
+            client.connect()                
+            .then(()=>{
+                return client.query(`SELECT * FROM messages WHERE id=$1`,[req.params.id])
+            })
+            .then((result)=>{
+                return res.render('edit-message', {result})
+            })
+        })
+
+app.post('/update',(req,res)=>{
+        const client = new Client({
+                connectionString: connectionString,
+            })
+            client.connect()
+            .then(()=>{
+                return client.query(`UPDATE messages SET title=$1, body=$2 WHERE id=$3`, [req.body.title, req.body.body, req.body.id])
+            })
+            .then((result)=>{
+                return res.redirect('/')
+            })
+        })   
+
 // Port:
 
 app.listen(port, () => console.log(`App listening on Port: ${port}!`))

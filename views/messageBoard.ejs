@@ -23,6 +23,10 @@
                 <form method='POST' action='delete/message/<%= result.rows[i].id %>'>
                     <td><button>Delete</button></td>
                 </form>
+                
+                <form method="GET" action='/edit/message/<%=result.rows[i].id%>'>
+                    <td><button>Edit</button></td>
+                </form>
             </tr>
             <% } %>
         </table>
