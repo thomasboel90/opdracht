@@ -5,7 +5,14 @@ const ejs = require('ejs');
 const app = express();
 const port = 3000;
 const { Pool, Client } = require('pg');
-const connectionString = 'postgres://' + process.env.POSTGRES_USER + ':' + process.env.POSTGRES_PASSWORD + '@localhost/postgres';
+const connectionString = 'postgresql://postgres:14061990@localhost:5433/postgres';
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static('public'));
+
+app.set('view engine', 'ejs');
 
 //Show messages from database:
 
@@ -19,7 +26,10 @@ const client = new Client({
     })
     .then((result) => {
         console.log(result);
-        return res.render('noteApp', {result})
+        return res.render('messageBoard', {result})
+    })
+    .catch((error) => {
+        console.log(error);
     })
 });
 

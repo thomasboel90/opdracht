@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Note App OSRE</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css" >
+</head>
+<body>
+    <h1>Note App OSRE</h1>
+
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Body</th>
+                <br>
+            </tr>
+            <% for(let i in result.rows) {%>
+            
+            <tr class="rows">
+                <td><%= result.rows[i].id %></td>
+                <td><%= result.rows[i].title %></td>
+                <td><%= result.rows[i].body %></td>
+                <form method='POST' action='delete/message/<%= result.rows[i].id %>'>
+                    <td><button>Delete</button></td>
+                </form>
+            </tr>
+            <% } %>
+        </table>
+
+    <a href="newMessage.html"><div id ="addMessage"><button>New Message</div></button></a>
+</body>
+</html>
