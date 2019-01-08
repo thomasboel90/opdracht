@@ -28,9 +28,21 @@ const client = new Client({
         console.log(result);
         return res.render('messageBoard', {result})
     })
-    .catch((error) => {
-        console.log(error);
-    })
+});
+
+//Add messages to the board:
+
+app.post('/add',(req,res) => {
+    const client = new Client({
+            connectionString: connectionString,
+        })
+        client.connect()
+        .then(()=>{
+            return client.query(`INSERT INTO messages (title, body) values ($1, $2)`, [req.body.title, req.body.body])
+        })
+        .then((result) => {
+            return res.redirect('/')
+        })
 });
 
 // Port:
