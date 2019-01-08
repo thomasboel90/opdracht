@@ -1,4 +1,6 @@
-// Modules:
+//---------//
+// Modules //
+//---------//
 
 const express = require('express');
 const ejs = require('ejs');
@@ -14,10 +16,12 @@ app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
 
-//Show messages from database:
+//-----------------------------//
+// Show messages from database //
+//-----------------------------//
 
 app.get('/',(req,res) => { 
-const client = new Client({
+    const client = new Client({
         connectionString: connectionString,
     })
     client.connect()
@@ -30,7 +34,9 @@ const client = new Client({
     })
 });
 
-//Add messages to the board:
+//---------------------------//
+// Add messages to the board //
+//---------------------------//
 
 app.post('/add',(req,res) => {
     const client = new Client({
@@ -45,7 +51,9 @@ app.post('/add',(req,res) => {
         })
 });
 
-//Delete messages from board:
+//----------------------------//
+// Delete messages from board //
+//----------------------------//
 
 app.post('/delete/message/:id',(req,res) => {
     const client = new Client({
@@ -60,34 +68,42 @@ app.post('/delete/message/:id',(req,res) => {
     })
 });
 
-//Edit messages from board:
+//--------------------------//
+// Edit messages from board //
+//--------------------------//
 
-app.get('/edit/message/:id',(req,res)=>{
-        const client = new Client({
-                connectionString: connectionString,
-            })
-            client.connect()                
-            .then(()=>{
-                return client.query(`SELECT * FROM messages WHERE id=$1`,[req.params.id])
-            })
-            .then((result)=>{
-                return res.render('edit-message', {result})
-            })
-        })
+app.get('/edit/message/:id',(req,res) => {
+    const client = new Client({
+        connectionString: connectionString,
+    })
+    client.connect()                
+    .then(() => {
+        return client.query(`SELECT * FROM messages WHERE id=$1`,[req.params.id])
+    })
+    .then((result) => {
+         return res.render('edit-message', {result})
+    })
+});
 
-app.post('/update',(req,res)=>{
-        const client = new Client({
-                connectionString: connectionString,
-            })
-            client.connect()
-            .then(()=>{
-                return client.query(`UPDATE messages SET title=$1, body=$2 WHERE id=$3`, [req.body.title, req.body.body, req.body.id])
-            })
-            .then((result)=>{
-                return res.redirect('/')
-            })
-        })   
+//----------------------------------------//
+// Update (edited) messages to your board //
+//----------------------------------------//
 
-// Port:
+app.post('/update',(req,res) => {
+    const client = new Client({
+        connectionString: connectionString,
+    })
+    client.connect()
+    .then(() => {
+        return client.query(`UPDATE messages SET title=$1, body=$2 WHERE id=$3`, [req.body.title, req.body.body, req.body.id])
+    })
+    .then((result) => {
+        return res.redirect('/')
+    })
+});
+
+//---------------//
+//      Port     //
+//---------------//
 
 app.listen(port, () => console.log(`App listening on Port: ${port}!`))
